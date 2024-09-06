@@ -9,9 +9,9 @@ public class Manhattan implements Heuristic{
 
             if(board[i]==0) continue ;
 
-            int dr = Math.abs((board[i-1]-1)/N - (i/ N)) ;
+            int dr = Math.abs((board[i]-1)/N - (i/ N)) ;
 
-            int dc = Math.abs((board[i-1]-1)%N - (i% N)) ;
+            int dc = Math.abs((board[i]-1)%N - (i% N)) ;
 
             count += dr + dc ;
         }

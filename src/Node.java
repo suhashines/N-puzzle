@@ -36,7 +36,7 @@ public class Node implements Comparable<Node>{
     private Node(int[]board){
 
         this.board = board ;
-        this.N = board.length;
+        this.N = (int)Math.sqrt(board.length); // restoring the N for child
     }
 
     public boolean isGoal(){
@@ -54,6 +54,10 @@ public class Node implements Comparable<Node>{
         int temp = board[i];
         board[i] = board[j];
         board[j] = temp ;
+
+        // updating the blank position
+        if(board[i]==0) blank = i ;
+        else blank = j ;
     }
 
     public List<Node> neighbours(){
@@ -63,8 +67,11 @@ public class Node implements Comparable<Node>{
 
         if(blank%N != 0){
             // not the leftmost, can swap with the left one
-            Node node = new Node(this.board) ;
+
+            Node node = new Node(this.board.clone()) ;
             node.swap(blank,blank-1);
+            node.parent = this ;
+            node.d = this.d + 1 ;
             nodes.add(node) ;
 
         }
@@ -73,9 +80,10 @@ public class Node implements Comparable<Node>{
 
             // not the rightmost, can swap with the right one
 
-            Node node = new Node(this.board) ;
+            Node node = new Node(this.board.clone()) ;
             node.swap(blank,blank+1) ;
-
+            node.parent = this ;
+            node.d = this.d + 1 ;
             nodes.add(node) ;
         }
 
@@ -84,20 +92,24 @@ public class Node implements Comparable<Node>{
 
             // not the uppermost , can swap with the upper one
 
-            Node node = new Node(this.board) ;
+            Node node = new Node(this.board.clone()) ;
             node.swap(blank,blank-N) ;
-
+            node.parent = this ;
+            node.d = this.d + 1 ;
             nodes.add(node) ;
         }
 
         if((blank/N)!=N-1){
 
-            // not the uppermost , can swap with the lower one
+//            System.out.println("blank "+blank+" N "+N);
 
-            Node node = new Node(this.board) ;
+            // not the lowermost , can swap with the lower one
+
+            Node node = new Node(this.board.clone()) ;
 
             node.swap(blank,blank+N) ;
-
+            node.parent = this ;
+            node.d = this.d + 1 ;
             nodes.add(node) ;
         }
 
@@ -133,5 +145,10 @@ public class Node implements Comparable<Node>{
     @Override
     public int compareTo(Node o) {
         return this.f - o.f ;
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(board);
     }
 }

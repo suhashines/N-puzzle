@@ -23,13 +23,12 @@ public class Main {
 
         Solver solver = new Solver(grid) ;
 
-        if(!solver.isSolvable()){
-            System.out.println("Puzzle instance is not solvable\n");
-            return ;
-        }
+        solver.setHeuristic(new Manhattan());
 
-        System.out.println("Hurray,let's solve");
+        solver.solve();
 
         solver.setHeuristic(new Hamming());
+
+        solver.solve();
     }
 }
